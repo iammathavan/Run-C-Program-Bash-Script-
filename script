@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# If there is already an executable file that exists, remove it first.
+if [ -f a.out ]
+then
+	rm a.out
+fi
+
+num=0
+
+# Go through each file to check if they exist.
+for file in "$@"
+do
+	if [ -f $file ]
+	then
+		((num++))
+	else
+		echo "$file Do not exist" 2> /dev/stderr
+	fi	
+done
+
+# If a single file is to be compiled...
+if [ $num -eq $# ] && [ $# -eq 1 ]
+then
+	gcc $1
+# If multiple files are to be compiled...
+elif [ $num -eq $# ] && [ $# -gt 1 ]
+then
+	gcc -Wall $@
+fi
+
+# Run the executable file
+if [ -f a.out ]
+then
+	chmod u+x a.out
+	./a.out
+fi
+
+exit 0;
